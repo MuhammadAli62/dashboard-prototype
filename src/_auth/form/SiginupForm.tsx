@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "@/components/Shared/Header";
 import Footer from "@/components/Shared/Footer";
-import emailjs from '@emailjs/browser';
+import emailjs from "@emailjs/browser";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase/firebaseConfig"; // Adjust the path
