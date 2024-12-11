@@ -1,0 +1,37 @@
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import bgImage from "../../assets/body-bg.webp";
+import AppSidebar from "@/components/Shared/app-sidebar";
+import SiteHeader from "@/components/Shared/navbar";
+import DashboardHeader from "@/components/Shared/dashboard-header";
+import MonthlyRevenueCard from "@/components/Shared/dashboard-chart";
+import RevenueChart from "@/components/Shared/barchart";
+
+const Dashboard = () => {
+    return (
+        <div className="relative min-h-screen" style={{
+            backgroundImage: `url(${bgImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+        }}>
+            <div className="relative z-10 min-h-screen bg-black bg-opacity-50">
+                <SidebarProvider>
+                    <AppSidebar />
+                    <SidebarInset className="bg-transparent">
+                        <SiteHeader />
+                        <main className="p-6">
+                            <DashboardHeader />
+                            <div className="flex flex-row w-full gap-4 mt-4">
+                                <RevenueChart />
+                                <MonthlyRevenueCard />
+                            </div>
+                        </main>
+                    </SidebarInset>
+                </SidebarProvider>
+            </div>
+        </div>
+    );
+}
+
+export default Dashboard;
+
