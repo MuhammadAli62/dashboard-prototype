@@ -42,12 +42,12 @@ const SignupForm = () => {
         setOtp(generatedOtp);
 
         try {
-            await emailjs.send(
-                "service_x7r00a8", // Replace with your EmailJS Service ID
-                "template_2scv5pf", // Replace with your EmailJS Template ID
-                { otp: generatedOtp, user_email: email }, // Template variables
-                
-            );
+          await emailjs.send(
+            "service_x7r00a8", // Replace with your EmailJS Service ID
+            "template_2scv5pf", // Replace with your EmailJS Template ID
+            { otp: generatedOtp, user_email: email }, // Template variables
+            "qw3XSq9Q51WM1HTbG" // Your EmailJS User ID (replace with the actual value)
+        );
 
             console.log(`OTP sent to ${email}: ${generatedOtp}`);
             setOtpSent(true);
