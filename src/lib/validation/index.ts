@@ -42,7 +42,7 @@ export const SignupFormSchema = z
     path: ["confirmpassword"],
   });
 
-export const SigninFormSchema = z.object({
+export const SinginFormSchema = z.object({
   email: z.string().email({ message: "Email is Invalid" }),
   password: z.string().min(6, { message: "Password too Short" })
 });
