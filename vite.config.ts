@@ -7,7 +7,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@emailjs/browser": "@emailjs/browser/dist/email.min.js",
     },
   },
 })
