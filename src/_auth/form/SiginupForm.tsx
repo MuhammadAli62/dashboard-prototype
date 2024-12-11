@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SignupFormSchema } from "../../lib/validation/index"; // Adjust the path as necessary
+import { SignupFormSchema } from "../../lib/validation"; // Adjust the path as necessary
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,8 +18,6 @@ const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
 const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
 const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_USER_ID;
 
-emailjs.init(EMAILJS_PUBLIC_KEY!);
-
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 const SignupForm: React.FC = () => {
@@ -30,6 +28,15 @@ const SignupForm: React.FC = () => {
     const [otpSent, setOtpSent] = useState(false);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log("EmailJS Configuration:", {
+            EMAILJS_SERVICE_ID,
+            EMAILJS_TEMPLATE_ID,
+            EMAILJS_PUBLIC_KEY,
+        });
+        emailjs.init(EMAILJS_PUBLIC_KEY!);
+    }, []);
 
     const form = useForm<z.infer<typeof SignupFormSchema>>({
         resolver: zodResolver(SignupFormSchema),
@@ -43,41 +50,54 @@ const SignupForm: React.FC = () => {
     });
 
     const sendOtpToEmail = async (email: string) => {
+        console.log("Attempting to send OTP to:", email);
         const generatedOtp = generateOTP();
         setOtp(generatedOtp);
 
         try {
+            console.log("EmailJS send parameters:", {
+                serviceId: EMAILJS_SERVICE_ID,
+                templateId: EMAILJS_TEMPLATE_ID,
+                templateParams: { otp: generatedOtp, user_email: email },
+            });
+
             const response = await emailjs.send(
                 EMAILJS_SERVICE_ID!,
                 EMAILJS_TEMPLATE_ID!,
                 { otp: generatedOtp, user_email: email }
             );
 
+            console.log("EmailJS response:", response);
+
             if (response.status === 200) {
-                console.log(`OTP sent to ${email}: ${generatedOtp}`);
+                console.log(`OTP sent successfully to ${email}: ${generatedOtp}`);
                 setOtpSent(true);
                 setError(null);
             } else {
-                throw new Error("Failed to send OTP");
+                throw new Error(`Failed to send OTP. Status: ${response.status}`);
             }
         } catch (error) {
             console.error("Error sending OTP:", error);
-            setError("Failed to send OTP. Please try again.");
+            setError(`Failed to send OTP. Error: ${error instanceof Error ? error.message : String(error)}`);
         }
     };
 
     const verifyOtp = (enteredOtp: string) => {
+        console.log("Verifying OTP:", enteredOtp, "Expected OTP:", otp);
         if (otp === enteredOtp) {
             setOtpVerified(true);
             setError(null);
+            console.log("OTP verified successfully");
         } else {
             setError("Invalid OTP. Please try again.");
+            console.log("OTP verification failed");
         }
     };
 
     const onSubmit = async (values: z.infer<typeof SignupFormSchema>) => {
         if (!otpVerified) {
-            return setError("Please verify your OTP before proceeding.");
+            setError("Please verify your OTP before proceeding.");
+            return;
         }
 
         setIsLoading(true);
@@ -100,7 +120,7 @@ const SignupForm: React.FC = () => {
             navigate("/dashboard");
         } catch (error: any) {
             console.error("Error during signup:", error);
-            setError("An error occurred during signup. Please try again.");
+            setError(`An error occurred during signup: ${error.message}`);
         } finally {
             setIsLoading(false);
         }
