@@ -2,21 +2,27 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SignupFormSchema } from "../../lib/validation"; // Adjust the path
+import { SignupFormSchema } from "../../lib/validation/index"; // Adjust the path as necessary
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "@/components/Shared/Header";
 import Footer from "@/components/Shared/Footer";
-import emailjs from "@emailjs/browser";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase/firebaseConfig"; // Adjust the path
+import { auth, db } from "../../firebase/firebaseConfig"; // Adjust the path as necessary
+import emailjs from "@emailjs/browser";
+
+const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_USER_ID;
+
+emailjs.init(EMAILJS_PUBLIC_KEY!);
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-const SignupForm = () => {
+const SignupForm: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setError] = useState<string | null>(null);
     const [otp, setOtp] = useState<string | null>(null);
@@ -36,29 +42,30 @@ const SignupForm = () => {
         },
     });
 
-    // Function to send OTP via EmailJS
     const sendOtpToEmail = async (email: string) => {
         const generatedOtp = generateOTP();
         setOtp(generatedOtp);
 
         try {
-          await emailjs.send(
-            "service_x7r00a8", // Replace with your EmailJS Service ID
-            "template_2scv5pf", // Replace with your EmailJS Template ID
-            { otp: generatedOtp, user_email: email }, // Template variables
-            "qw3XSq9Q51WM1HTbG" // Your EmailJS User ID (replace with the actual value)
-        );
+            const response = await emailjs.send(
+                EMAILJS_SERVICE_ID!,
+                EMAILJS_TEMPLATE_ID!,
+                { otp: generatedOtp, user_email: email }
+            );
 
-            console.log(`OTP sent to ${email}: ${generatedOtp}`);
-            setOtpSent(true);
-            setError(null);
+            if (response.status === 200) {
+                console.log(`OTP sent to ${email}: ${generatedOtp}`);
+                setOtpSent(true);
+                setError(null);
+            } else {
+                throw new Error("Failed to send OTP");
+            }
         } catch (error) {
             console.error("Error sending OTP:", error);
             setError("Failed to send OTP. Please try again.");
         }
     };
 
-    // Function to verify the OTP
     const verifyOtp = (enteredOtp: string) => {
         if (otp === enteredOtp) {
             setOtpVerified(true);
@@ -68,8 +75,7 @@ const SignupForm = () => {
         }
     };
 
-    // Form submission handler
-    async function onSubmit(values: z.infer<typeof SignupFormSchema>) {
+    const onSubmit = async (values: z.infer<typeof SignupFormSchema>) => {
         if (!otpVerified) {
             return setError("Please verify your OTP before proceeding.");
         }
@@ -98,7 +104,7 @@ const SignupForm = () => {
         } finally {
             setIsLoading(false);
         }
-    }
+    };
 
     return (
         <>
@@ -108,7 +114,34 @@ const SignupForm = () => {
                     <div className="flex flex-col items-center min-w-80 p-6 rounded mx-auto shadow-md">
                         <h2 className="text-2xl font-bold text-black mb-4">Create New Account</h2>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col w-full gap-5 mt-4">
-                            {/* Name, Username, Email, Password */}
+                            <div className="flex flex-col md:flex-row justify-between gap-3">
+                                <FormField
+                                    name="name"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Name</FormLabel>
+                                            <FormControl>
+                                                <Input type="text" className="shad-input sm:w-310 w-full" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    name="username"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Username</FormLabel>
+                                            <FormControl>
+                                                <Input type="text" className="shad-input sm:w-310 w-full" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
                             <FormField
                                 name="email"
                                 control={form.control}
@@ -122,8 +155,34 @@ const SignupForm = () => {
                                     </FormItem>
                                 )}
                             />
-
-                            {/* Send OTP Button */}
+                            <div className="flex flex-col md:flex-row justify-between gap-3">
+                                <FormField
+                                    name="password"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Password</FormLabel>
+                                            <FormControl>
+                                                <Input type="password" className="shad-input sm:w-310 w-full" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    name="confirmpassword"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Confirm Password</FormLabel>
+                                            <FormControl>
+                                                <Input type="password" className="shad-input sm:w-310 w-full" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
                             {!otpSent && (
                                 <Button
                                     type="button"
@@ -133,8 +192,6 @@ const SignupForm = () => {
                                     Send OTP
                                 </Button>
                             )}
-
-                            {/* OTP Verification */}
                             {otpSent && !otpVerified && (
                                 <FormField
                                     name="otp"
@@ -155,8 +212,6 @@ const SignupForm = () => {
                                     )}
                                 />
                             )}
-
-                            {/* Submit Button */}
                             <Button type="submit" className="shad-button_primary" disabled={!otpVerified}>
                                 {isLoading ? <span>Loading...</span> : "Sign Up"}
                             </Button>
@@ -177,3 +232,4 @@ const SignupForm = () => {
 };
 
 export default SignupForm;
+
