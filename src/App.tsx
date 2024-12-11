@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './_root/pages/Home';
 import SignupForm from './_auth/form/SiginupForm';

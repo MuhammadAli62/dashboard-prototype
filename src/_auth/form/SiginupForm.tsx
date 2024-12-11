@@ -28,7 +28,7 @@ const SignupForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
-  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [_generatedOtp, setGeneratedOtp] = useState("");
   const [errorMessage, setError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof SignupFormSchema>>({

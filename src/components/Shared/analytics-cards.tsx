@@ -2,7 +2,6 @@
 
 import { Card } from "@/components/ui/card"
 import { Line, LineChart, ResponsiveContainer } from "recharts"
-import { ChartContainer } from "@/components/ui/chart"
 import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react'
 
 // Sample data for the charts
