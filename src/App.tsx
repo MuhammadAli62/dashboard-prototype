@@ -19,6 +19,8 @@ const App: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path='/register' element={<SignupForm />} />
             <Route path='/login' element={<SignInForm />} />
+            <Route path='/forgetpassword' element={<ForgetPassword/>}/>
+            <Route path='/form' element={<EmailForm/>}/>
             <Route path='/dashboard' element={
               <ProtactedRoute>
                 <Dashboard />
@@ -29,8 +31,7 @@ const App: React.FC = () => {
                 <Layout />
               </ProtactedRoute>
             } />
-            <Route path='/forgetpassword' element={<ForgetPassword/>}/>
-            <Route path='/form' element={<EmailForm/>}/>
+
 
           </Routes>
         </UserAuthContextProvider>
