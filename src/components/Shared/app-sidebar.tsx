@@ -1,7 +1,7 @@
 
 import { Sidebar, SidebarContent, SidebarHeader } from "../ui/sidebar"
 
-import logo from "../../assets/FullLogo.jpg"
+import logo from "../../assets/FTSLOGO.png"
 import Sidebarmenu from "./Sidebarnav"
 const AppSidebar = () => {
     return (
