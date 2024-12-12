@@ -1,13 +1,26 @@
 import React, { useState } from 'react';
 import emailjs from '@emailjs/browser';
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useToast } from '@/hooks/use-toast';
 
-const EmailForm: React.FC = () => {
-  const [name, setName] = useState<string>('');
+
+const OtpEmailForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  // Function to generate a 6-digit OTP
+  const generateOTP = (): string => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    setIsLoading(true);
+
+    const otp = generateOTP();
 
     // Your EmailJS service ID, template ID, and Public Key
     const serviceId = 'service_x7r00a8';
@@ -16,47 +29,50 @@ const EmailForm: React.FC = () => {
 
     // Create a new object that contains dynamic template params
     const templateParams = {
-      from_name: name,
-      from_email: email,
-      to_name: 'Web Wizard',
-      message: message,
+      to_email: email,
+      otp: otp,
     };
 
-    // Send the email using EmailJS
-    emailjs.send(serviceId, templateId, templateParams, publicKey)
-      .then((response) => {
-        console.log('Email sent successfully!', response);
-        setName('');
-        setEmail('');
-        setMessage('');
-      })
-      .catch((error) => {
-        console.error('Error sending email:', error);
+    try {
+      // Send the email using EmailJS
+      const response = await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      console.log('OTP sent successfully!', response);
+      toast({
+        title: "OTP Sent",
+        description: "An OTP has been sent to your email.",
       });
+      setEmail('');
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send OTP. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="emailForm">
-      <input
-        type="text"
-        placeholder="Your Name"
-        value={name}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-      />
-      <input
-        type="email"
-        placeholder="Your Email"
-        value={email}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-      />
-      <textarea
-        placeholder="Your Message"
-        value={message}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value)}
-      ></textarea>
-      <button type="submit">Send Email</button>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          placeholder="Your Email"
+          value={email}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+      <Button type="submit" disabled={isLoading}>
+        {isLoading ? 'Sending...' : 'Send OTP'}
+      </Button>
     </form>
   );
 };
 
-export default EmailForm;
+export default OtpEmailForm;
+

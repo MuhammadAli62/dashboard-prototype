@@ -8,6 +8,7 @@ import Dashboard from './_root/pages/Dashboard';
 import { UserAuthContextProvider } from './context/AuthContext';
 import ForgetPassword from './_auth/form/Forgetpassword';
 import Layout from './_root/pages/layout';
+import { AdminPanel } from './_root/pages/Admin';
 
 
 const App: React.FC = () => {
@@ -20,6 +21,7 @@ const App: React.FC = () => {
             <Route path='/register' element={<SignupForm />} />
             <Route path='/login' element={<SignInForm />} />
             <Route path='/forgetpassword' element={<ForgetPassword/>}/>
+            <Route path='/admin' element={<AdminPanel/>}/>
             <Route path='/form' element={<EmailForm/>}/>
             <Route path='/dashboard' element={
               <ProtactedRoute>

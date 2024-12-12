@@ -28,6 +28,7 @@ const Header: React.FC = () => {
     { title: 'Why Us', path: '/why-us' },
     { title: 'Login', path: '/login' },
     { title: 'Register', path: '/register' },
+    { title: 'Admin', path: '/admin' },
   ];
 
   return (
