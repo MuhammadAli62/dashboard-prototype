@@ -20,6 +20,10 @@ const SignupForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setError] = useState<string | null>(null);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const [otp, setOtp] = useState<string | null>(null);
+  const [enteredOtp, setEnteredOtp] = useState<string>("");
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isOtpVerified, setIsOtpVerified] = useState(false);
 
   const navigate = useNavigate();
 
@@ -35,31 +39,59 @@ const SignupForm = () => {
     },
   });
 
+  const generateOTP = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  };
+
+  const sendOTP = async (email: string, name: string) => {
+    const generatedOtp = generateOTP();
+    setOtp(generatedOtp);
+
+    const serviceId = 'service_x7r00a8';
+    const templateId = 'template_eeq2mj9';
+    const publicKey = 'qw3XSq9Q51WM1HTbG';
+
+    const templateParams = {
+      form_name: "FTS",
+      to_email: email,
+      to_name: name,
+      message: `Your OTP is: ${generatedOtp}`
+    };
+
+    try {
+      const response = await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      console.log('OTP sent successfully:', response.status, response.text);
+      setIsOtpSent(true);
+    } catch (error) {
+      console.error('Failed to send OTP:', error);
+      setError("Failed to send OTP. Please try again.");
+    }
+  };
+
+  const verifyOTP = () => {
+    if (enteredOtp === otp) {
+      setIsOtpVerified(true);
+      setError(null);
+    } else {
+      setError("Invalid OTP. Please try again.");
+    }
+  };
+
   async function onSubmit(values: z.infer<typeof SignupFormSchema>) {
+    if (!isOtpVerified) {
+      setError("Please verify your email with OTP before signing up.");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
-    const { name, username, email, password,image } = values;
+    const { name, username, email, password, image } = values;
 
-    const serviceId = 'service_x7r00a8'
-    const tamplateId = 'template_eeq2mj9'
-    const publicKey = 'qw3XSq9Q51WM1HTbG'
-
-    const tamplateParam = {
-      form_name: name,
-      form_email: email,
-      to_name: "Muhammad Ali",
-      message: "Hello Sir OTP"
-    }
-    const response = await emailjs.send(serviceId, tamplateId, tamplateParam, publicKey);
-    console.log('Success!', response.status, response.text);
-    
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      const response = await emailjs.send(serviceId, tamplateId, tamplateParam, publicKey);
-      console.log('Success!', response.status, response.text);
       
-     let downloadURL = '';
+      let downloadURL = '';
       if (image) {
         const date = new Date().getTime();
         const storageRef = ref(storage, `${name}_${date}`);
@@ -203,6 +235,29 @@ const SignupForm = () => {
                   </FormItem>
                 )}
               />
+              {!isOtpSent && (
+                <Button
+                  type="button"
+                  onClick={() => sendOTP(form.getValues("email"), form.getValues("name"))}
+                  className="shad-button_secondary"
+                >
+                  Send OTP
+                </Button>
+              )}
+              {isOtpSent && !isOtpVerified && (
+                <div>
+                  <Input
+                    type="text"
+                    placeholder="Enter OTP"
+                    value={enteredOtp}
+                    onChange={(e) => setEnteredOtp(e.target.value)}
+                    className="shad-input mb-2"
+                  />
+                  <Button type="button" onClick={verifyOTP} className="shad-button_secondary">
+                    Verify OTP
+                  </Button>
+                </div>
+              )}
               <div className="flex flex-col md:flex-row justify-between gap-3">
                 <FormField
                   name="password"
@@ -231,7 +286,7 @@ const SignupForm = () => {
                   )}
                 />
               </div>
-              <Button type="submit" className="shad-button_primary">
+              <Button type="submit" className="shad-button_primary" disabled={!isOtpVerified}>
                 {isLoading ? <span>Loading...</span> : "Sign Up"}
               </Button>
               {errorMessage && <p className="text-red-500 text-sm mt-2">{errorMessage}</p>}
