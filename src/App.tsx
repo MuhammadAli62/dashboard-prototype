@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './_root/pages/Home';
 import SignupForm from './_auth/form/SiginupForm';
 import SignInForm from './_auth/form/SiginForm';
+import EmailForm from './_auth/form/emailform';
 import ProtactedRoute from './_root/ProtactedRoute';
 import Dashboard from './_root/pages/Dashboard';
 import { UserAuthContextProvider } from './context/AuthContext';
@@ -29,6 +30,8 @@ const App: React.FC = () => {
               </ProtactedRoute>
             } />
             <Route path='/forgetpassword' element={<ForgetPassword/>}/>
+            <Route path='/form' element={<EmailForm/>}/>
+
           </Routes>
         </UserAuthContextProvider>
       </div>

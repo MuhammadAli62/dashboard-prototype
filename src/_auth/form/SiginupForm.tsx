@@ -14,11 +14,12 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db, storage } from "../../firebase/firebaseConfig";
 import { SignupFormSchema } from "@/lib/validation";
+import emailjs from '@emailjs/browser';
 
 const SignupForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setError] = useState<string | null>(null);
-  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  //const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -38,12 +39,27 @@ const SignupForm = () => {
     setIsLoading(true);
     setError(null);
 
-    const { name, username, email, password, image } = values;
+    const { name, username, email, password } = values;
 
+    const serviceId = 'service_x7r00a8'
+    const tamplateId = 'template_eeq2mj9'
+    const publicKey = 'qw3XSq9Q51WM1HTbG'
+
+    const tamplateParam = {
+      form_name: name,
+      form_email: email,
+      to_name: "Muhammad Ali",
+      message: "Hello Sir OTP"
+    }
+    const response = await emailjs.send(serviceId, tamplateId, tamplateParam, publicKey);
+    console.log('Success!', response.status, response.text);
+    
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-
-      let downloadURL = '';
+      const response = await emailjs.send(serviceId, tamplateId, tamplateParam, publicKey);
+      console.log('Success!', response.status, response.text);
+      
+     /* let downloadURL = '';
       if (image) {
         const date = new Date().getTime();
         const storageRef = ref(storage, `${name}_${date}`);
@@ -79,7 +95,7 @@ const SignupForm = () => {
         email,
         photoURL: downloadURL || null,
         createdAt: new Date().toISOString(),
-      });
+      });*/
 
       console.log("User registered and data stored successfully.");
       navigate("/dashboard");
@@ -114,7 +130,7 @@ const SignupForm = () => {
               To use FTS, enter your details
             </p>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col w-full gap-5 mt-4">
-              <div className="flex flex-row items-center justify-center">
+              {/*<div className="flex flex-row items-center justify-center">
                 <FormField
                   name="image"
                   control={form.control}
@@ -145,7 +161,7 @@ const SignupForm = () => {
                     </FormItem>
                   )}
                 />
-              </div>
+              </div>*/}
               <div className="flex flex-col md:flex-row justify-between gap-3">
                 <FormField
                   name="name"
