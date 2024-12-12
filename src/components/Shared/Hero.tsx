@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import ourvideo from "../../../public/hero.mp4"
+import { Link } from "react-router-dom"
 
 
 export default function Hero() {
@@ -51,13 +52,12 @@ export default function Hero() {
                 <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700">
                   Login
                 </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
+                <Link to="/form"
+                 
                   className="border-indigo-600 text-indigo-600 hover:bg-indigo-50"
                 >
                   Register
-                </Button>
+                </Link>
               </div>
             </div>
           </div>
