@@ -69,7 +69,7 @@ const SignupForm = () => {
         await new Promise<void>((resolve, reject) => {
           uploadTask.on(
             'state_changed',
-            (snapshot) => {
+            () => {
               // Handle progress if needed
             },
             (error) => {
