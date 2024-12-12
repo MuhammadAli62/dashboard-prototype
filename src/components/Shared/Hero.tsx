@@ -53,10 +53,9 @@ export default function Hero() {
                   Login
                 </Button>
                 <Link to="/form"
-                 
                   className="border-indigo-600 text-indigo-600 hover:bg-indigo-50"
                 >
-                  Register
+                  Registers
                 </Link>
               </div>
             </div>
