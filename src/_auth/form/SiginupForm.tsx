@@ -119,7 +119,7 @@ const SignupForm = () => {
         displayName: name,
         photoURL: downloadURL || null,
       });
-
+      console.log(name)
       await setDoc(doc(db, "users", res.user.uid), {
         uid: res.user.uid,
         displayName: name,
@@ -162,7 +162,7 @@ const SignupForm = () => {
               To use FTS, enter your details
             </p>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col w-full gap-5 mt-4">
-              <div className="flex flex-row items-center justify-center">
+                <div className="flex flex-row items-center justify-center">
                 <FormField
                   name="image"
                   control={form.control}

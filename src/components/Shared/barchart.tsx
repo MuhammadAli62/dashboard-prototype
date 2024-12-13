@@ -89,7 +89,7 @@ const RevenueChart = () => {
     return (
         <Card className="bg-[#070C29]  rounded-2xl border-0 shadow-lg shadow-navy-900/50 w-full max-w-2xl">
             <CardHeader>
-                <CardTitle className="text-slate-200">Monthly Revenue</CardTitle>
+                <CardTitle className="text-slate-200">Monthly Savings</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="h-80 w-full">
@@ -104,7 +104,7 @@ const RevenueChart = () => {
                         </div>
                     </div>
                     <p className="text-slate-400 text-sm mt-1">
-                        Average monthly sale for every author
+                        Average monthly Savings
                     </p>
                 </div>
             </CardContent>

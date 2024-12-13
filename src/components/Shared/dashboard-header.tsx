@@ -8,7 +8,7 @@ export default function DashboardHeader() {
 
 
     const {currentUser} = useUserAuth()
-
+    console.log(currentUser)
     return (
         <div className="min-h-[300px] w-full bg-[#090F2A] p-6 rounded-lg">
             <div className="mx-auto max-w-7xl">
@@ -44,7 +44,7 @@ export default function DashboardHeader() {
                                 <CardContent className="p-6">
                                     <div className="mb-4">
                                         <h2 className="text-3xl font-bold text-white">$65.4K</h2>
-                                        <p className="text-sm text-gray-400">Today's Sales</p>
+                                        <p className="text-sm text-gray-400">Today's Savings</p>
                                     </div>
                                     <div className="h-2 w-full rounded-full bg-gray-800">
                                         <div
@@ -60,7 +60,7 @@ export default function DashboardHeader() {
                                 <CardContent className="p-6">
                                     <div className="mb-4">
                                         <h2 className="text-3xl font-bold text-white">78.4%</h2>
-                                        <p className="text-sm text-gray-400">Growth Rate</p>
+                                        <p className="text-sm text-gray-400"></p>
                                     </div>
                                     <div className="h-2 w-full rounded-full bg-gray-800">
                                         <div
@@ -70,16 +70,6 @@ export default function DashboardHeader() {
                                     </div>
                                 </CardContent>
                             </Card>
-                        </div>
-                    </div>
-
-                    {/* Right Section - Illustration */}
-                    <div className="relative hidden lg:block">
-                        <div className="absolute inset-0">
-                            <img
-                                src={PersonImage}
-                                alt="Dashboard Illustration"
-                            />
                         </div>
                     </div>
                 </div>

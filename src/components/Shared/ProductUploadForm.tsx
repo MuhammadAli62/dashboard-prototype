@@ -15,7 +15,9 @@ export function ProductUploadForm() {
     price: '',
     shortDescription: '',
     longDescription: '',
-    supplierName: '',
+    CDWPrice: '',
+    InsightPrice: '',
+    FCNPrice: '',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -40,7 +42,9 @@ export function ProductUploadForm() {
         price: '',
         shortDescription: '',
         longDescription: '',
-        supplierName: '',
+        CDWPrice: '',
+        InsightPrice: '',
+        FCNPrice: '',
       })
     } catch (error) {
       console.error("Error adding document: ", error)
@@ -109,11 +113,31 @@ export function ProductUploadForm() {
             />
           </div>
           <div>
-            <Label htmlFor="supplierName">Supplier Name</Label>
+            <Label htmlFor="CDWPrice">CDW Price</Label>
             <Input
-              id="supplierName"
-              name="supplierName"
-              value={product.supplierName}
+              id="CDWPrice"
+              name="CDWPrice"
+              value={product.CDWPrice}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="InsightPrice">Insight Price</Label>
+            <Input
+              id="InsightPrice"
+              name="InsightPrice"
+              value={product.InsightPrice}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="FCNPrice">FCN Price</Label>
+            <Input
+              id="FCNPrice"
+              name="FCNPrice"
+              value={product.FCNPrice}
               onChange={handleChange}
               required
             />

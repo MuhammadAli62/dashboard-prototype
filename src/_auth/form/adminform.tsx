@@ -25,9 +25,9 @@ const AdminsignInForm = () => {
     async function onSubmit(values: z.infer<typeof SinginFormSchema>) {
         const { email, password } = values
 
-        if(email === "test@123gmail.com" && password === "123456")
+        if(email === "test123@gmail.com" && password === "123456")
         {
-            return  Navigate("/dashboard")
+            return  Navigate("/admin")
         }
     };
 

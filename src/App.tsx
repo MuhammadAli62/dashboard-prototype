@@ -9,6 +9,7 @@ import { UserAuthContextProvider } from './context/AuthContext';
 import ForgetPassword from './_auth/form/Forgetpassword';
 import Layout from './_root/pages/layout';
 import { AdminPanel } from './_root/pages/Admin';
+import AdminsignInForm from './_auth/form/adminform';
 
 
 const App: React.FC = () => {
@@ -21,6 +22,7 @@ const App: React.FC = () => {
             <Route path='/register' element={<SignupForm />} />
             <Route path='/login' element={<SignInForm />} />
             <Route path='/forgetpassword' element={<ForgetPassword/>}/>
+            <Route path='/adminform' element={<AdminsignInForm/>}/>
             <Route path='/admin' element={<AdminPanel/>}/>
             <Route path='/form' element={<EmailForm/>}/>
             <Route path='/dashboard' element={

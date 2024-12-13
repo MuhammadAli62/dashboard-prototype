@@ -38,11 +38,11 @@ const Layout = () => {
                                 <DashboardMetrics />
                                 <div className="flex flex-col lg:flex-row w-full gap-4 mt-4">
                                     <div className="container mx-auto p-4">
-                                        <h1 className="text-2xl font-bold mb-4">Search Products</h1>
+                                        <h1 className="text-2xl font-bold mb-4 text-white">Search Products</h1>
                                         <ProductSearch onProductsFound={setProducts} />
                                         {products.length > 0 && (
                                             <div className="mt-4">
-                                                <h2 className="text-xl font-semibold mb-2">Search Results</h2>
+                                                <h2 className="text-xl font-semibold mb-2 text-white">Search Results</h2>
                                                 <ProductList products={products} />
                                             </div>
                                         )}

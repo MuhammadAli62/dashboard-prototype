@@ -50,9 +50,9 @@ export function ProductSearch({ onProductsFound }: ProductSearchProps) {
   }
 
   return (
-    <form onSubmit={handleSearch} className="space-y-4">
+    <form onSubmit={handleSearch} className="space-y-4 text-white">
       <div>
-        <Label htmlFor="search-sku">Search by SKU</Label>
+        <Label htmlFor="search-sku" className='text-white'>Search by SKU</Label>
         <Input
           id="search-sku"
           value={sku}
