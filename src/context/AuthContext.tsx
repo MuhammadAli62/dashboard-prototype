@@ -25,7 +25,7 @@ export const UserAuthContextProvider = ({ children }: { children: ReactNode }) =
     if (loading) {
         return <div>Loading...</div>; 
     }
-
+  
     return (
         <UserAuthContext.Provider value={{ currentUser, loading }}>
             {children}

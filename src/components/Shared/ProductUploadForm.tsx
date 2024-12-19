@@ -15,9 +15,9 @@ export function ProductUploadForm() {
     price: '',
     shortDescription: '',
     longDescription: '',
-    CDWPrice: '',
-    InsightPrice: '',
-    FCNPrice: '',
+    cdwprice: '',
+    insightprice: '',
+    fcnprice: '',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -30,7 +30,10 @@ export function ProductUploadForm() {
     try {
       await addDoc(collection(db, 'products'), {
         ...product,
-        price: parseFloat(product.price)
+        price: parseFloat(product.price),
+        cdwprice: parseFloat(product.cdwprice),
+        insightprice: parseFloat(product.insightprice),
+        fcnprice: parseFloat(product.fcnprice),
       })
       toast({
         title: "Product uploaded",
@@ -42,9 +45,9 @@ export function ProductUploadForm() {
         price: '',
         shortDescription: '',
         longDescription: '',
-        CDWPrice: '',
-        InsightPrice: '',
-        FCNPrice: '',
+        cdwprice: '',
+        insightprice: '',
+        fcnprice: '',
       })
     } catch (error) {
       console.error("Error adding document: ", error)
@@ -57,7 +60,7 @@ export function ProductUploadForm() {
   }
 
   return (
-    <div className=" bg-[#090F2A] p-4 md:p-6 lg:p-8 rounded-lg">
+    <div className="bg-[#090F2A] p-4 md:p-6 lg:p-8 rounded-lg">
       <Card className="mx-auto max-w-3xl space-y-8 bg-[#13142b] p-6 text-white shadow-2xl">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -113,31 +116,37 @@ export function ProductUploadForm() {
             />
           </div>
           <div>
-            <Label htmlFor="CDWPrice">CDW Price</Label>
+            <Label htmlFor="cdwprice">CDW Price</Label>
             <Input
-              id="CDWPrice"
-              name="CDWPrice"
-              value={product.CDWPrice}
+              id="cdwprice"
+              name="cdwprice"
+              type="number"
+              step="0.01"
+              value={product.cdwprice}
               onChange={handleChange}
               required
             />
           </div>
           <div>
-            <Label htmlFor="InsightPrice">Insight Price</Label>
+            <Label htmlFor="insightprice">Insight Price</Label>
             <Input
-              id="InsightPrice"
-              name="InsightPrice"
-              value={product.InsightPrice}
+              id="insightprice"
+              name="insightprice"
+              type="number"
+              step="0.01"
+              value={product.insightprice}
               onChange={handleChange}
               required
             />
           </div>
           <div>
-            <Label htmlFor="FCNPrice">FCN Price</Label>
+            <Label htmlFor="fcnprice">FCN Price</Label>
             <Input
-              id="FCNPrice"
-              name="FCNPrice"
-              value={product.FCNPrice}
+              id="fcnprice"
+              name="fcnprice"
+              type="number"
+              step="0.01"
+              value={product.fcnprice}
               onChange={handleChange}
               required
             />

@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
-import PersonImage from "../../assets/Mike Friedel.jpg"
+import PersonImage from "../../assets/124599.jpg"
 import { useUserAuth } from "@/context/AuthContext"
 
 
